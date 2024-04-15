@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html ng-app="oppia" ng-controller="Admin">
+  <head>
+    <title>Oppia Admin Panel</title>
+
+    {% include 'pages/header_css_libs.html' %}
+    {% include 'pages/header_js_libs.html' %}
+    <script>
+      var GLOBALS = {
+        csrf_token: JSON.parse('{{csrf_token|js_string}}'),
+        USERNAME: JSON.parse('{{username|js_string}}'),
+        USER_EMAIL: JSON.parse('{{user_email|js_string}}'),
+        PROFILE_PICTURE_DATA_URL: JSON.parse('{{profile_picture_data_url|js_string}}'),
+        IS_MODERATOR: JSON.parse('{{is_moderator|js_string}}'),
+        IS_SUPER_ADMIN: JSON.parse('{{is_super_admin|js_string}}'),
+        LOGOUT_URL: JSON.parse('{{logout_url|js_string}}'),
+        ASSET_DIR_PREFIX: JSON.parse('{{ASSET_DIR_PREFIX|js_string}}'),
+        DEMO_EXPLORATIONS: JSON.parse('{{demo_explorations|js_string}}'),
+        DEMO_EXPLORATION_IDS: JSON.parse('{{demo_exploration_ids|js_string}}'),
+        DEMO_COLLECTIONS: JSON.parse('{{demo_collections|js_string}}'),
+        HUMAN_READABLE_CURRENT_TIME: JSON.parse(
+          '{{human_readable_current_time|js_string}}'),
+        CONTINUOUS_COMPUTATIONS_DATA: JSON.parse(
+          '{{continuous_computations_data|js_string}}'),
+        ONE_OFF_JOB_SPECS: JSON.parse('{{one_off_job_specs|js_string}}'),
+        UNFINISHED_JOB_DATA: JSON.parse('{{unfinished_job_data|js_string}}'),
+        RECENT_JOB_DATA: JSON.parse('{{recent_job_data|js_string}}'),
+        DEV_MODE: JSON.parse('{{DEV_MODE|js_string}}')
+      }
+    </script>
+    <style>
+      html, body {
+        background-color: #eee;
+      }
+    </style>
+  </head>
+
+  <body>
+    <admin-navbar username="username" user-email="userEmail"
+                  profile-picture-data-url="profilePictureDataUrl"
+                  is-moderator="isModerator" is-super-admin="isSuperAdmin"
+                  logout-url="logoutUrl">
+    </admin-navbar>
+
+    <div align="center"
+         ng-if="statusMessage"
+         style="background-color: #ffffff; position: fixed; max-width: 30%; z-index: 3000; border: 1px solid #00376d; right: 30px; bottom: 30px">
+      <[statusMessage]>
+    </div>
+    <br>
+
+    <div style="padding-top: 16px;">
+      <admin-dev-mode-activities-tab ng-if="isActivitiesTabOpen() && inDevMode"
+                                     set-status-message="setStatusMessage">
+      </admin-dev-mode-activities-tab>
+      <admin-prod-mode-activities-tab ng-if="isActivitiesTabOpen() && !inDevMode">
+      </admin-prod-mode-activities-tab>
+
+      <admin-jobs-tab ng-if="isJobsTabOpen()"
+                      set-status-message="setStatusMessage">
+      </admin-jobs-tab>
+
+      <admin-config-tab ng-if="isConfigTabOpen()"
+                        set-status-message="setStatusMessage">
+      </admin-config-tab>
+
+      <admin-misc-tab ng-if="isMiscTabOpen()"
+                      set-status-message="setStatusMessage">
+      </admin-misc-tab>
+    </div>
+
+    <div ng-if="inDevMode" class="oppia-dev-mode">
+      Dev Mode
+    </div>
+
+    {% include 'components/forms/form_builder_templates.html' %}
+    {% include 'pages/footer_js_libs.html' %}
+    {% include 'pages/admin/admin_navbar_directive.html' %}
+    {% include 'pages/admin/activities_tab/admin_dev_mode_activities_tab_directive.html' %}
+    {% include 'pages/admin/activities_tab/admin_prod_mode_activities_tab_directive.html' %}
+    {% include 'pages/admin/config_tab/admin_config_tab_directive.html' %}
+    {% include 'pages/admin/jobs_tab/admin_jobs_tab_directive.html' %}
+    {% include 'pages/admin/misc_tab/admin_misc_tab_directive.html' %}
+
+    <script src="{{TEMPLATE_DIR_PREFIX}}/app.js"></script>
+    <script src="{{TEMPLATE_DIR_PREFIX}}/pages/admin/Admin.js"></script>
+    <script src="{{TEMPLATE_DIR_PREFIX}}/pages/admin/AdminNavbarDirective.js"></script>
+    <script src="{{TEMPLATE_DIR_PREFIX}}/pages/admin/AdminRouterService.js"></script>
+    <script src="{{TEMPLATE_DIR_PREFIX}}/pages/admin/AdminTaskManagerService.js"></script>
+    <script src="{{TEMPLATE_DIR_PREFIX}}/pages/admin/activities_tab/AdminDevModeActivitiesTabDirective.js"></script>
+    <script src="{{TEMPLATE_DIR_PREFIX}}/pages/admin/activities_tab/AdminProdModeActivitiesTabDirective.js"></script>
+    <script src="{{TEMPLATE_DIR_PREFIX}}/pages/admin/config_tab/AdminConfigTabDirective.js"></script>
+    <script src="{{TEMPLATE_DIR_PREFIX}}/pages/admin/jobs_tab/AdminJobsTabDirective.js"></script>
+    <script src="{{TEMPLATE_DIR_PREFIX}}/pages/admin/misc_tab/AdminMiscTabDirective.js"></script>
+    <script src="{{TEMPLATE_DIR_PREFIX}}/directives.js"></script>
+    <script src="{{TEMPLATE_DIR_PREFIX}}/services/alertsService.js"></script>
+    <script src="{{TEMPLATE_DIR_PREFIX}}/services/explorationContextService.js"></script>
+    <script src="{{TEMPLATE_DIR_PREFIX}}/services/utilsService.js"></script>
+
+    <script src="{{TEMPLATE_DIR_PREFIX}}/components/forms/FormBuilder.js"></script>
+    <script src="{{TEMPLATE_DIR_PREFIX}}/components/forms/ObjectEditorDirective.js"></script>
+
+    <script src="{{TEMPLATE_DIR_PREFIX}}/expressions/expressionSyntaxTree.js"></script>
+    <script src="{{TEMPLATE_DIR_PREFIX}}/expressions/evaluator.js"></script>
+    <script src="{{TEMPLATE_DIR_PREFIX}}/expressions/parser.js"></script>
+    <script src="{{TEMPLATE_DIR_PREFIX}}/domain/utilities/UrlInterpolationService.js"></script>
+
+    <script>
+      {{ value_generators_js }}
+    </script>
+
+    {{ rte_components_html }}
+  </body>
+</html>
